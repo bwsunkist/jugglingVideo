@@ -59,6 +59,7 @@ def colorPick(frame, color_ranges, morph):
     return result, hsvMaskOpening
 
 def writeFrameNum(img, txt, size, color):
+    font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(img, txt, (10,150), font, size, color, 2, cv2.LINE_AA)
     return img
 
@@ -68,9 +69,9 @@ if __name__ == '__main__':
     if not cap.isOpened():
         raise Exception('read video failed.')
 
-    allFrameNum = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    allFrameNum = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    if initialFrameNum <= 0 or initialFrameNum > allFrameNum:
+    if initialFrameNum < 0 or initialFrameNum > allFrameNum:
         raise ValueError("invalid initialFrameNum.")
 
 
@@ -88,7 +89,10 @@ if __name__ == '__main__':
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
-            raise Exception('read video failed.')
+            if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
+                break
+            else:
+                raise Exception('read video failed.')
 
         h  = cv2.getTrackbarPos('h',  'image')
         s  = cv2.getTrackbarPos('s',  'image')
@@ -103,7 +107,6 @@ if __name__ == '__main__':
         frame = cv2.resize(frame, dsize = None, fx = imgRatio, fy = imgRatio)
 
         img, mask = colorPick(frame, (h, s, v, h1, s1, v1), morph)
-        font = cv2.FONT_HERSHEY_SIMPLEX
         
         txt = txtFormat + str(nowFrameNum)
         writeFrameNum(img, txt, txtSize, txtColor)
