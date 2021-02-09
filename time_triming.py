@@ -31,6 +31,8 @@ if __name__ == '__main__':
 
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
     newClip = cv2.VideoWriter(outputPath, fourcc, cap_fps, (cap_width, cap_height))
+    if not newClip.isOpened():
+        raise Exception('read newClip failed.')
 
     while cap.isOpened():
         ret, frame = cap.read()

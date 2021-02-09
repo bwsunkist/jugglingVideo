@@ -133,7 +133,9 @@ if __name__ == '__main__':
         else:
             continue
 
-    print('result: h, s, v, h1, s1, v1: '+str(h)+', '+str(s)+', '+str(v)+', '+str(h1)+', '+str(s1)+', '+str(v1))
+    print('result: ')
+    print('h, s, v, h1, s1, v1 = '+str(h)+', '+str(s)+', '+str(v)+', '+str(h1)+', '+str(s1)+', '+str(v1))
+    print('morph = '+str(morph))
 
     cap.release()
     cv2.destroyAllWindows()
